@@ -190,6 +190,3 @@ with open(args['records_path']) as records_file,\
 			output_file.write(line)
 			num_of_records += 1
 			text = ''
-			num += 1
-			if num == 5:
-				break
