@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 #
-# Klasifikátor poľa 072 z polí 245, 653, 655, 964.
+# Klasifikátor poľa 072 z polí 080, 600, 610, 611, 630, 648, 008, 100,
+#	                           650, 651, 653, 655, 670, 678, 695, 964, 245.
 #
 # autor: Ondrej Kurák
 # email: xkurak00@stud.fit.vutbr.cz
@@ -91,28 +92,10 @@ for file_name in files:
 	if os.path.isfile( my_dir + 'data/' + file_name):
 		continue
 	start_time = time.time()
-	print('Donwloading', file_name, end='...', flush=True)
+	print('Donwloading', file_name, end=' ... ', flush=True)
 	urlretrieve(down_link + file_name, my_dir + 'data/' + file_name)
 	print("Done(", round(time.time() -  start_time, 0),"s)", sep='', flush=True)
-	'''
-	u = urllib.urlopen(down_link + file_name)
-	with open(my_dir + 'data/' + file_name, 'wb') as output_file:
-		meta = u.info()
-		file_size = int(meta.getheaders("Content-Length")[0])
-		print("Downloading: %s Bytes: %s".format(file_name, file_size), flush=True)
 
-		file_size_dl = 0
-		block_sz = 8192
-		while True:
-		    buffer = u.read(block_sz)
-		    if not buffer:
-		        break
-		    file_size_dl += len(buffer)
-		    output_file.write(buffer)
-		    status = r"%10d  [%3.2f%%]" % (file_size_dl, file_size_dl * 100. / file_size)
-		    status = status + chr(8)*(len(status)+1)
-		    print(status, end=' ', flush=True)
-	'''
 start_time = time.time()
 print("md5sum check:",end = " ", flush = True)
 with open(my_dir + 'data/' + 'md5sum.txt') as md5_file:
@@ -160,6 +143,7 @@ pipeline = Pipeline([
 ])
 print("Done(", round(time.time() -  start_time, 0),"s)", sep='', flush=True)
 
+print("Processing data:", flush = True)
 clas_fields = ["080", "600", "610", "611", "630", "648", "008", "100",
 	  "650", "651", "653", "655", "670", "678", "695", "964"]
 num = 0
