@@ -106,7 +106,7 @@ with open(my_dir + 'data/' + 'md5sum.txt') as md5_file:
 			if check != md5(my_dir + 'data/' + name):
 				raise
 		except:
-				print('EROOR: md5sum of',name, file=sys.stderr)
+				print('EROOR: md5sum of',name, '. Delete this file and run again' file=sys.stderr)
 				sys.exit(1)
 print("Done(", round(time.time() -  start_time, 0),"s)", sep='', flush=True)
 
