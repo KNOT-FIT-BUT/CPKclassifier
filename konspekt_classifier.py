@@ -146,10 +146,12 @@ print("Done(", round(time.time() -  start_time, 0),"s)", sep='', flush=True)
 print("Processing data:", flush = True)
 clas_fields = ["080", "600", "610", "611", "630", "648", "008", "100",
 	  "650", "651", "653", "655", "670", "678", "695", "964"]
-num = 0
+
+
 with open(args['records_path']) as records_file,\
 	 open(args['save_path'], 'w') as output_file:
 	text = ''
+    title = ''
 	konspekt = False
 	num_of_records = 0;
 	for line in records_file:
@@ -190,6 +192,4 @@ with open(args['records_path']) as records_file,\
 			output_file.write(line)
 			num_of_records += 1
 			text = ''
-			num += 1
-			if num == 5:
-				break
+            title = ''
