@@ -150,8 +150,7 @@ clas_fields = ["080", "600", "610", "611", "630", "648", "008", "100",
 
 with open(args['records_path']) as records_file,\
 	 open(args['save_path'], 'w') as output_file:
-	text = ''
-    title = ''
+	text = '' ; title = ''
 	konspekt = False
 	num_of_records = 0;
 	for line in records_file:
@@ -191,5 +190,4 @@ with open(args['records_path']) as records_file,\
 				output_file.write('072 c $a' + item[0] + '$b' + str(item[1]) + '\n')
 			output_file.write(line)
 			num_of_records += 1
-			text = ''
-            title = ''
+			text = '' ; title = ''
