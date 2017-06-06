@@ -1,0 +1,12 @@
+Ahoj, jak se máš?
+Nazdar, kam jdeš?
+Pes je zvíře!
+Kočka se označuje jako šelma.
+Obsah čtverce nad předponou je roven obsahu čtverců nad objema odvěsnami.
+Každý rovnostranný trojúhelník je i rovnoramenný.
+Ahoj, co nového?
+Slon je nejtěžší suchozemské zvíře.
+Čtverec má všechny strany stejně dlouhé.
+Ahoj, co děláš?
+Kočka je zvíře.
+Trojúhelník má tři vnitřní úhly.
