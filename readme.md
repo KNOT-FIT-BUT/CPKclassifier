@@ -74,7 +74,7 @@ Pro názornost budeme předpokládat, že potřebná data se nachází v: data/N
 
 Predikci spustíme následujícím příkazem:
 
-    ./DocClassifier.py prediction --data data/NAKI/data.txt --metadata data/NAKI/meta.csv --classifiers data/NAKI/NAKI_cls.bin --config data/NAKI/config.ini --log data/NAKI/pred.log > data/pred.csv
+    ./DocClassifier.py prediction --data data/NAKI/data.txt --metadata data/NAKI/meta.csv --classifiers data/NAKI/NAKI_cls.bin --config data/NAKI/config.ini --log data/NAKI/pred.log > data/NAKI/pred.csv
 
 Předpokládáme vytvoření souboru data.txt s plnými texty a souboru meta.csv s metadaty. V souboru pred.log bude zaznamenán průběh operace a výsledky budou uloženy v pred.csv.
 
