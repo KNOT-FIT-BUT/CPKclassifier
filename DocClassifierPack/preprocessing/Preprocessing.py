@@ -37,8 +37,6 @@ class Preprocessing(object):
         self.taggerPOS=taggerPOS
         self.logAfterLines=logAfterLines
         
-        self.subRe=re.compile(r'([\,\.\:\;\?\!])', re.LOCALE)
-        
         
     def setParams(self, args=None, stopWords=None, tagger=None, taggerPOS=None, logAfterLines=None):
         """
@@ -80,12 +78,13 @@ class Preprocessing(object):
                     
             WordsRemover=RemoveWords(wordsToRem, self.args.minWordLength, self.args.maxWordLength)
             
-            if self.args.lemmatize or self.args.pos:
+            if self.args.lemmatize or self.args.pos or self.args.sepSigns:
                 lemPosExt=Lemmatizer(self.tagger, self.taggerPOS)
                 if self.args.pos:
                     onlyPos=lemPosExt.translateNumericPOS(self.args.pos)
             
             lineCnt=0
+            
             
             for line in inFile:
                 line=line.rstrip('\n')
@@ -93,25 +92,29 @@ class Preprocessing(object):
                 
                 if lineCnt%self.logAfterLines==0:
                     logging.info("Předzpracovávám "+str(lineCnt)+". řádek.")
-
-                if self.args.sepSigns:
-                    #oddělení ,.:; znaků od slov.
-                    line =self.subRe.sub(r' \1 ', line)
+                                    
+                if self.args.pos:
+                    #extrakce slovních druhů
+                    line=lemPosExt.extract(line, onlyPos, self.args.lemmatize)
                     
-                #Odstranění nežádaných slov
-                line=" ".join(WordsRemover.removeWords(line))   
+                elif self.args.lemmatize:
+                    #lemmatizace
+                    line=lemPosExt.lemmatize(line)
+                        
+                elif self.args.sepSigns:
+                    #oddělení znaků od slov např. ,.:;
+                    #lemmatizace a extrakce příznaků již znaky separuje
+                    #neprovádíme tedy separaci znavu, když není potřeba
                     
-                if lemPosExt:
-                    #lemmatizace a extrakce slovních druhů
-                    if self.args.pos:
-                        line=lemPosExt.extract(line, onlyPos, self.args.lemmatize)
-                    else:
-                        line=lemPosExt.lemmatize(line)
-
+                    
+                    line=[ x[0] for x in lemPosExt.getWordsPOS(line)]
                 
                 if isinstance(line, list):
                     line=" ".join(line)
                     
+                #Odstranění nežádaných slov
+                line=" ".join(WordsRemover.removeWords(line))   
+                
                 if self.args.unidecode:
                     line=unidecode(line)
                     
@@ -251,6 +254,30 @@ class Lemmatizer(object):
                 words.append(lemma.lemma)
             
         return words
+    
+    def getWordsPOS(self, text):
+        """
+        Získá slovní druhy k jednotlivým slovům v parametru text.
+        
+        :param text: Text pro analýzu.
+        :returns:  list -- of tuples, kde (slovo, POS)
+        """
+        
+        self.tokenizerPOS.setText(text)
+        words=[]
+        while self.tokenizerPOS.nextSentence(self.forms, self.tokens):
+            self.taggerPOS.tag(self.forms, self.lemmas)
+            for i in range(len(self.lemmas)):
+                lemma = self.lemmas[i]
+                token = self.tokens[i]
+                self.converter.convert(lemma)
+                POS=lemma.tag.split("|")[0].split("=")[1]
+
+                words.append((text[token.start : token.start + token.length], POS))
+                    
+        return words
+        
+        
     def extract(self, text, only, lemmatized=True):
         """
         Extrahuje pouze slova, která mají definovaný slovní druh v parametru only.

@@ -126,23 +126,23 @@ class ArgumentsManager:
         parserPreprocessing = subparsers.add_parser('preprocessing',help='Nástroje pro předzpracování textu.')
         
         parserPreprocessing.add_argument("--lemmatize", action='store_true',
-                help="Provede lemmatizaci textu.")
+                help="Provede lemmatizaci textu. Odděluje také znaky od slov.")
         parserPreprocessing.add_argument("--noSW", action='store_true',
                 help="Odstraní stopslova.")
         parserPreprocessing.add_argument("--unidecode", action='store_true',
                 help="Přeloží unicode znaky do jejich nejbližší možné reprezentace v ascii.")
                 
         parserPreprocessing.add_argument("--sepSigns", action='store_true',
-                help="Oddělení znaků: ,.:;?! od slov.")
+                help="Oddělení znaků od slov. (např: : ,.:;?!). Není nutné používat v kombinaci s lemmatize a pos.")
 
         parserPreprocessing.add_argument("--minWordLength", type=int,
-                help="Vezme pouze slova, která mají počet znaků větší nebo roven MINWORDLENGTH (před případnou lemmatizací).")
+                help="Vezme pouze slova, která mají počet znaků větší nebo roven MINWORDLENGTH (po případné lemmatizací/extrakci/sepSigns).")
         
         parserPreprocessing.add_argument("--maxWordLength", type=int,
-                help="Vezme pouze slova, která mají počet znaků menší nebo roven MAXWORDLENGTH (před případnou lemmatizací).")
+                help="Vezme pouze slova, která mají počet znaků menší nebo roven MAXWORDLENGTH (po případné lemmatizací/extrakci/sepSigns).")
         
         parserPreprocessing.add_argument("--pos", nargs='+',
-                help="Extrahuje definované slovní druhy. Slovní druhy: 1,2,3,4,5,6,7,8,9,10,Z(symboly),X(neznámé)")
+                help="Extrahuje definované slovní druhy. Slovní druhy: 1,2,3,4,5,6,7,8,9,10,Z(symboly),X(neznámé). Odděluje také znaky od slov.")
         
         parserPreprocessingCase = parserPreprocessing.add_mutually_exclusive_group()
         parserPreprocessingCase.add_argument("--uc", action='store_true',
