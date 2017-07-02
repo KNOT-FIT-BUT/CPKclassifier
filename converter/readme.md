@@ -19,7 +19,7 @@ Všetko sa zapisuje do súborov lib_XYZ.tsv, kde XZY predstavuje čislo knižnic
 
 Priklad spustenia:
 	
-	python3 export_fields_to_files.py -sp /mnt/data-2/xkurak00/NAKI_CPK/data/lib_tsv_from_db_2017
+	python3 export_fields_to_files.py -sp data/lib_tsv_from_db_2017
 
 # save_fulltexts_from_db.py
 
@@ -33,7 +33,7 @@ Ich následne uloženie vo formáte .txt vo forme jedného riadku.
 
 Príklad spustenia:
 	
-	python3 save_fulltexts_from_db.py -sp /mnt/data-2/xkurak00/NAKI_CPK/data/fulltext/fulltexts_from_db_201703/
+	python3 save_fulltexts_from_db.py -sp data/fulltext/fulltexts_from_db_201703/
 
 
 # fulltext_parser.py
