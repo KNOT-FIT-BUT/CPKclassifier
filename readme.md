@@ -6,14 +6,14 @@ Informace k nové verzi 2.0 jsou [zde](#verze-2).
 
 # Instalace
 
-Zdrojové soubory pro DocClassifier si nahrajte do složky, kde budete chtít DocClassifier mít uložený.
-Konkrétně se jedná o soubor DocClassifier.py a složky config, data a DocClassifierPack.
+Zdrojové soubory pro CPKclassifier si nahrajte do složky, kde budete chtít CPKclassifier mít uložený.
+Konkrétně se jedná o soubor CPKclassifier.py a složky config, data a CPKclassifierPack.
 
 * Složka config obsahuje soubor s výchozí konfigurací.
 * Složka data obsahuje taggery pro program MorphoDiTa a demonstrační příklady.
-* DocClassifierPack obsahuje balíčky, které DocClassifier.py používá.
+* CPKclassifierPack obsahuje balíčky, které CPKclassifier.py používá.
 
-DocClassifier nevyžaduje instalaci. Je ovšem nutné nainstalovat závislosti a mít nainstalovaný Python řady 3.
+CPKclassifier nevyžaduje instalaci. Je ovšem nutné nainstalovat závislosti a mít nainstalovaný Python řady 3.
 
 ## Instalace závislostí
 
@@ -40,11 +40,11 @@ Předvedeme si použití na příkladech, které objasní, jakým způsobem lze 
 
 Více informací k jednotlivým volbám lze nalézt přímo v konfiguračním souboru. Další informace pak lze získat vypsáním nápovědy:
 
-    ./DocClassifier.py
+    ./CPKclassifier.py
 
 Nápovědu pro jednotlivé nástroje pak lze získat například pro předzpracování takto:
 
-    ./DocClassifier.py preprocessing
+    ./CPKclassifier.py preprocessing
 
 U příkladů budeme často používat konfigurační soubory. Přídavné konfigurační soubory přepisují hodnoty, které jsou v nich uvedené, z výchozího konfiguračního souboru.
 
@@ -75,7 +75,7 @@ Pro názornost budeme předpokládat, že potřebná data se nachází v: data/N
 
 Predikci spustíme následujícím příkazem:
 
-    ./DocClassifier.py prediction --data data/NAKI/data.txt --metadata data/NAKI/meta.csv --classifiers data/NAKI/NAKI_cls.bin --config data/NAKI/config.ini --log data/NAKI/pred.log > data/NAKI/pred.csv
+    ./CPKclassifier.py prediction --data data/NAKI/data.txt --metadata data/NAKI/meta.csv --classifiers data/NAKI/NAKI_cls.bin --config data/NAKI/config.ini --log data/NAKI/pred.log > data/NAKI/pred.csv
 
 Předpokládáme vytvoření souboru data.txt s plnými texty a souboru meta.csv s metadaty. V souboru pred.log bude zaznamenán průběh operace a výsledky budou uloženy v pred.csv.
 
@@ -85,18 +85,18 @@ V této konfiguraci se klasifikátor pokusí odhadnout tři kategorie (seřazen�
 
 V této sekci si uvedeme příklad použití pro:
 
-    ./DocClassifier.py preprocessing
+    ./CPKclassifier.py preprocessing
 
 Budeme chtít lemmatizovat text, separovat znaky ,.:;?! , odstranit stopslova a převést všechny znaky na malé. Výsledek si uložíme do souboru data/priklady/data_p.txt
 To vše lze provést následujícím příkazem:
 
-    ./DocClassifier.py preprocessing --lemmatize --sepSigns --noSW --lc --input data/priklady/data.txt > data/priklady/data_p.txt
+    ./CPKclassifier.py preprocessing --lemmatize --sepSigns --noSW --lc --input data/priklady/data.txt > data/priklady/data_p.txt
 
 ## Výběr dat
 
 Budeme používat nástroj:
 
-    ./DocClassifier.py getData
+    ./CPKclassifier.py getData
 
 Chceme vybrat všechny dokumenty, které nemají přiřazenou kategorii, a uložit je do nových souborů.
 
@@ -114,7 +114,7 @@ Také chceme mít ve výsledném novém metadatovém souboru všechna pole, nast
 
 Teď již stačí spustit následující příkaz:
 
-    ./DocClassifier.py getData --data data/priklady/data.txt --metadata data/priklady/meta.csv --saveDataTo data/priklady/data_bez.txt --saveMetadataTo data/priklady/meta_bez.csv --config data/priklady/prep.ini --log data/priklady/prep.log
+    ./CPKclassifier.py getData --data data/priklady/data.txt --metadata data/priklady/meta.csv --saveDataTo data/priklady/data_bez.txt --saveMetadataTo data/priklady/meta_bez.csv --config data/priklady/prep.ini --log data/priklady/prep.log
 
 Tímto si uložíme náš výběr dat do souborů data_bez.txt a meta_bez.csv. Také si necháme vypsat průběh do logovacího souboru.
 
@@ -122,7 +122,7 @@ Tímto si uložíme náš výběr dat do souborů data_bez.txt a meta_bez.csv. T
 
 Budeme používat nástroj
 
-    ./DocClassifier.py features
+    ./CPKclassifier.py features
 
 V tomto příkladu extrahujeme příznaky z dokumentů, které mají přiřazenou kategorii. Takto extrahované příznaky můžeme později použít pro natrénování klasifikátoru.
 
@@ -140,7 +140,7 @@ Ve FEATURES jsme nastavili parametr FULL_TEXT_VECTORIZER: FULL_TEXT_VECTORIZER=C
 
 Nakonec spustíme systém pomocí:
 
-    ./DocClassifier.py features --data data/priklady/data_p.txt --metadata data/priklady/meta.csv --saveTo data/priklady/ft.bin --config data/priklady/ft.ini --log data/priklady/ft.log
+    ./CPKclassifier.py features --data data/priklady/data_p.txt --metadata data/priklady/meta.csv --saveTo data/priklady/ft.bin --config data/priklady/ft.ini --log data/priklady/ft.log
 
 Výsledek bude uložen do tří souborů:
 
@@ -157,7 +157,7 @@ Mimo to si opět necháváme uložit i průběh do logovacího souboru.
 
 Budeme používat nástroj:
 
-    ./DocClassifier.py classification
+    ./CPKclassifier.py classification
 
 Nejprve budeme trénovat klasifikátor z předem extrahovaných a uložených příznaků. Poté si ukážeme, jak natrénovat klasifikátor přímo z dat.
 
@@ -165,7 +165,7 @@ Přídavný konfigurační soubor tentokrát nepoužijeme vůbec. Vystačíme s 
 
 Spustíme tedy pouze příkaz:
 
-    ./DocClassifier.py classification --features data/priklady/ft.bin --saveTo data/priklady/cls.bin --log data/priklady/cls.log
+    ./CPKclassifier.py classification --features data/priklady/ft.bin --saveTo data/priklady/cls.bin --log data/priklady/cls.log
 
 Výsledek bude uložen do čtyř souborů:
 
@@ -186,13 +186,13 @@ Protože chceme pro trénování použít výchozí konfiguraci a pro extrakci p
 
 Příkaz by tedy vypadal:
 
-     ./DocClassifier.py classification --data data/priklady/data_p.txt --metadata data/priklady/meta.csv --config data/priklady/ft.ini --saveTo data/priklady/cls_d.bin --log data/priklady/cls_d.log
+     ./CPKclassifier.py classification --data data/priklady/data_p.txt --metadata data/priklady/meta.csv --config data/priklady/ft.ini --saveTo data/priklady/cls_d.bin --log data/priklady/cls_d.log
 
 ## Predikce
 
 Budeme používat nástroj:
 
-     ./DocClassifier.py prediction
+     ./CPKclassifier.py prediction
 
 Je nutné mít již předem natrénovaný klasifikátor (sekce: Trénování klasifikátoru).
 
@@ -210,7 +210,7 @@ Použijeme klasifikátor vzniklý procesem trénování popsaný v části Trén
 
 Příkaz:
 
-     ./DocClassifier.py prediction --data data/priklady/data_p.txt --metadata data/priklady/meta.csv --classifiers data/priklady/cls.bin --config data/priklady/pred.ini --log data/priklady/pred.log
+     ./CPKclassifier.py prediction --data data/priklady/data_p.txt --metadata data/priklady/meta.csv --classifiers data/priklady/cls.bin --config data/priklady/pred.ini --log data/priklady/pred.log
 
 Dostaneme výstup ve formátu CSV, např.:
 
@@ -223,7 +223,7 @@ Dostaneme výstup ve formátu CSV, např.:
 
 Budeme používat nástroj:
 
-     ./DocClassifier.py testing
+     ./CPKclassifier.py testing
 
 Otestujeme vytvořený klasifikátor. Opět použijeme již před připravený konfigurační soubor. Musíme v něm uvést, s jakými daty chceme pracovat, jak chceme extrahovat příznaky, jak se má trénovat klasifikátor, a v neposlední řadě i způsob testování (popřípadě i nastavení predikce).
 
@@ -233,7 +233,7 @@ Z velké části vystačíme s výchozím nastavením. Pouze nastavíme, že chc
 
 Příkaz:
 
-     ./DocClassifier.py testing --data data/priklady/data_p.txt --metadata data/priklady/meta.csv --writeResults data/priklady/test.res --writeConfMetrix data/priklady/test.cmat --config data/priklady/test.ini --log data/priklady/test.log
+     ./CPKclassifier.py testing --data data/priklady/data_p.txt --metadata data/priklady/meta.csv --writeResults data/priklady/test.res --writeConfMetrix data/priklady/test.cmat --config data/priklady/test.ini --log data/priklady/test.log
 
 Výsledky z testování dostaneme na standardním výstupu. Dále si ukládáme matici záměn (data/priklady/test.cmat) a výsledky predikcí z jednotlivých kroků (data/priklady/test.res). Jako vždy ukládáme i log.
 
