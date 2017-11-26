@@ -1,4 +1,4 @@
-﻿# DocClassifier
+﻿# CPKclassifier
 
 Systém pro přiřazení tříd klasifikace Konspekt bibliografickým záznamům, které mohou mít přiřazen i soubor s plnotextovou podobou daného dokumentu. Řešení poskytuje mimo jiné také nástroje pro testování úspěšnosti a předzpracování vstupních textů, se zaměřením na český jazyk.
 
