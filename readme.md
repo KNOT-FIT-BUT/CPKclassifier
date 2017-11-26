@@ -2,6 +2,7 @@
 
 Systém pro přiřazení tříd klasifikace Konspekt bibliografickým záznamům, které mohou mít přiřazen i soubor s plnotextovou podobou daného dokumentu. Řešení poskytuje mimo jiné také nástroje pro testování úspěšnosti a předzpracování vstupních textů, se zaměřením na český jazyk.
 
+Informace k nové verzi 2.0 jsou [zde](#verze-2).
 
 # Instalace
 
@@ -235,3 +236,59 @@ Příkaz:
      ./DocClassifier.py testing --data data/priklady/data_p.txt --metadata data/priklady/meta.csv --writeResults data/priklady/test.res --writeConfMetrix data/priklady/test.cmat --config data/priklady/test.ini --log data/priklady/test.log
 
 Výsledky z testování dostaneme na standardním výstupu. Dále si ukládáme matici záměn (data/priklady/test.cmat) a výsledky predikcí z jednotlivých kroků (data/priklady/test.res). Jako vždy ukládáme i log.
+
+# Verze 2
+
+Jedná se o novou verzi systému pro klasifikaci, která vznikla z DocClassifier. Tato nová verze obohacuje starší systém o několik nových funkcí. Významnější změny oproti staršímu systému jsou uvedeny níže. Uvedené parametry, v textu níže, se odkazují na příslušné parametry konfiguračních souborů a vždy se vztahují k sekci, která je uvedena v hranatých závorkách u nadpisu.
+
+## Předzpracování [PREPROCESSING]
+
+Došlo k optimalizaci, paralelizaci a opravě známých chyb u předzpracování.
+
+Nově je tedy možné pustit předzpracování v paralelním režimu. Je možné nastavit počet podílejících se procesů na převodu vstupních dat parametrem WORKERS. Samotná dělba práce mezi procesy probíhá tak, že jeden proces (hlavní) prochází vstupní soubor a čte jej řádek po řádku. Prázdné řádky nedeleguje, ale přímo zpracovává. Delegování prázdných řádku způsobovalo velké prodlevy při čekání u vstupu do kritické sekce (užitečná práce byla kratší než režie pro synchronizaci).
+Neprázdné řádky jsou dále delegovány ostatním procesům.
+
+Neprázdný řádek může být rozdělen na více částí, které budou zpracovávány zvlášť a to ze dvou důvodů.
+
+Prvním důvodem je více homogenizovat zátěž mezi procesy, jelikož nějaký proces může získat velký dokument a dlouho jej zpracovávat zatímco ostatní procesy nemají žádnou užitečnou práci. Velikost části lze nastavit parametrem MAX_NUMBER_OF_WORDS_PER_LINE_PART.
+
+Druhým důvodem je omezení, které klade použitá knihovna pro komunikaci mezi paralelními procesy, která si vynucuje rozdělení dokumentu na menší části.
+
+## Získávání dat [GET_DATA]
+
+Nově je možné sloučit několik metadatových polí do sebe či utvářet jejich kopie. Nastavení se provádí v poli GET_META_FIELDS.
+
+Kopie umožňují například spustit trénování/klasifikaci nad stejným druhem dat, ale s použitím samostatného klasifikátoru pro originál a pro kopii.
+
+Sloučení polí umožňuje začlenit více polí do jednoho nového pole a tím potenciálně zvětšit množinu příznaků.
+
+
+## Příznaky [FEATURES]
+
+V nové verzi lze spustit extrakci příznaků v paralelním režimu pomocí parametru WORKERS. Trénování jednoho extraktoru příznaků má vždy na zodpovědnost jeden proces. Samotná extrakce příznaků, pomocí natrénovaného extraktoru, pak probíhá tak, že se nejprve extrahuje pomocí jednoho extraktoru, procesy si dělí jednotlivé dokumenty mezi sebou, a pak se potenciálně pokračuje na další druh dat.
+
+Extraktor může získat svůj slovník nad jiným druhem dat než, nad kterým bude provádět samotnou extrakci. Nastavení probíhá pomocí parametrů FULL_TEXT_VECTORIZER_BUILD_VOCABULARY_ON a META_VECTORIZERS_BUILD_VOCABULARY_ON.
+V neposlední řadě byla rozšířena práce s prázdnými dokumenty, aby nebylo nutné mít pro klasifikaci či trénování klasifikátoru u daného dokumentu vždy všechny druhy dat, ale třeba jen některé. Nastavení se provádí pomocí parametru SKIP_EMPTY. Nicméně je nutné si uvědomit, že některé dokumenty nemusí být klasifikovány vůbec, pokud nemají přiřazeny ani jeden druh dat. V takovém případě by byl vrácen prázdný výsledek.
+
+## Trénování klasifikátoru [CLASSIFICATION]
+
+V této verzi je možné trénovat několik klasifikátorů paralelně. Nastavení se provádí, obdobně jako v předchozích případech, parametrem WORKERS.
+
+Dále je možné nastavit práh pro klasifikaci u jednotlivých klasifikátorů, kdy je možné říct, že pokud si je klasifikátor s daným výsledkem klasifikace jist jenom na 30%, tak jej nebude systém započítávat k výsledkům ostatních klasifikátorů a nebude zahrnut v celkovém výsledku. Tím i automaticky dochází k snížení celkové jistoty. Teoreticky 100% jistotu můžeme získat jen u dokumentů, které obsahují všechny požadované druhy dat a všechny klasifikátory jsou si 100% jisty. Nastavení prahu je v parametru CLASSIFIER.
+
+Nová verze zavádí automatické získávání vah pro klasifikátory. Získávání vah probíhá otestováním klasifikátoru na dané trénovací množině a to v několika křížově validačních krocích (počet kroků lze nastavit v WEIGHT_AUTO_CV). Průměrná úspěšnost je potom použita jako váha. Na rozdíl od fixní váhy jsou získávány váhy pro jednotlivé natrénované kategorie/třídy zvlášť. Můžeme tedy tímto způsobem říct, že daný klasifikátor je slabý pro určování jedné kategorie, ale naopak pro druhou je dobrý. Nastavení automatické váhy je v CLASSIFIER.
+
+## Predikce [PREDICTION]
+
+Predikce byla paralelizována. Příslušné nastavení, lze nalézt v WORKERS.
+
+Dále je umožněno nastavit práh pro celkovou jistotu, tedy ne jen pro daný klasifikátor jako u sekce CLASSIFICATION. Pokud bude celková jistota klasifikace dokumentu pod úrovní prahu, tak jej má ponechat jako neklasifikovaný a vrátit prázdný výsledek. Nastavení je v THRESHOLD.
+
+## Statistiky [STATS]
+Tato sekce je zcela nová a umožňuje získat dodatečné statistiky z csv souborů, které vznikají například při klasifikaci. Vypisuje následující statistiky:
+
+* počet dokumentů
+* počet pravých kategorií
+* počty dokumentů v pravých kategoriích
+* počet predikovaných kategorií
+* počty dokumentů v predikovaných kategoriích

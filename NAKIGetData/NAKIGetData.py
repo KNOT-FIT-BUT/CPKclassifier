@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 # Uses config.ini for configuration.
 """
-Contains class for getting data from NAKI project to suitable format for DocClasifier.
+Contains class for getting data from NAKI project to suitable format for CPKclassifier.
 
 @author:     Martin Dočekal
 @contact:    xdocek09@stud.fit.vubtr.cz
@@ -14,6 +14,7 @@ import re
 import logging
 import configparser
 import copy
+import glob
 
 from argparse import ArgumentParser, ArgumentTypeError
 from asyncore import write
@@ -177,7 +178,7 @@ class ArgumentsManager:
         :param cls: arguments
         """
         
-        parser = ExceptionsArgumentParser(description="Tool for getting data from NAKI project to suitable format for DocClasifier.")
+        parser = ExceptionsArgumentParser(description="Tool for getting data from NAKI project to suitable format for CPKclassifier.")
         
         parser.add_argument("--docFolder", type=str,
                 help="Folder where documents fulltexts are saved.")
@@ -243,7 +244,7 @@ class FieldItem(object):
 
 class NAKIGetData( object):
     """
-    Class for getting data from NAKI project to suitable format for DocClasifier. 
+    Class for getting data from NAKI project to suitable format for CPKclassifier. 
     """
     
     fieldsFlags=["008", "072", "080", "600", "610", "611", "630", "648", "100", "650", "651", "653", "655", "670", "678", "695", "964","245"]
@@ -273,6 +274,7 @@ class NAKIGetData( object):
         
         
         
+        
         dictMorpho=self.config["DICT"]
         if not os.path.isabs(self.config["DICT"]):
             dictMorpho=os.path.dirname(os.path.realpath(__file__))+"/"+self.config["DICT"]
@@ -280,6 +282,7 @@ class NAKIGetData( object):
         self.lemmatizer=Lemmatizer(dictMorpho)
         self.fieldsForLematization=self.config["FIELDS_FOR_LEMMATIZATION"].split(",")
         self.lemmFieldExtension=self.config["LEMMATIZED_FIELD_EXTENSION"]
+        self.fulltextFileExtension=self.config["FULLTEXT_FILE_EXTENSION"]
 
     def __getHierMap(self, hierFile):
         """
@@ -398,7 +401,9 @@ class NAKIGetData( object):
         :param dri:    Document ID.
         :returns: string -- Document with concatenated lines.
         """
-        path=os.path.join(self.docFolder, str(dri)+".lemm")
+
+        path = os.path.join(self.docFolder, str(dri)+self.fulltextFileExtension)
+            
         if not self.__docHaveContent(dri):
             return None
         
@@ -411,7 +416,8 @@ class NAKIGetData( object):
         :param dri:Document ID.
         :returns: True document have content.
         """
-        path=os.path.join(self.docFolder, str(dri)+".lemm")
+        path = os.path.join(self.docFolder, str(dri)+self.fulltextFileExtension)
+            
         if not os.path.isfile(path) :
             print("File: "+path+" does not exist.", file=sys.stderr)
             return False
