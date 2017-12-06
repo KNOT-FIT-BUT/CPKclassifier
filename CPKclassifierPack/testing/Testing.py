@@ -195,7 +195,7 @@ class Testing(object):
         """
         getBest=1
         if targetsNames!=[]:
-            getBest=self.nBest
+            getBest=len(targetsNames) if self.nBest > len(targetsNames) else self.nBest
             
         okCnt=[[0,0,0,0] for x in range(0, getBest)]
 

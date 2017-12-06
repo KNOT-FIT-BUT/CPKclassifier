@@ -330,10 +330,12 @@ class Features(object):
             docNum=len(actData)
             if splitIntoPartsOfMaxSize or workers>1:
                 #nastavíme velikost jednoho bloku
-                partSize=docNum/workers
+                partSize=int(docNum/workers)
+                if partSize==0:
+                    partSize=docNum
                 
                 if splitIntoPartsOfMaxSize and splitIntoPartsOfMaxSize<partSize:
-                    partSize=splitIntoPartsOfMaxSize
+                    partSize=int(splitIntoPartsOfMaxSize)
                     
                 if workers>1:
                     #inicializace víceprocesového  zpracování
@@ -359,6 +361,7 @@ class Features(object):
                     #rozsekáme data na části a vložíme je do fronty
                     for i in range(math.ceil(docNum/partSize)):
                         endOfPart=(i+1)*partSize if (i+1)*partSize<docNum else docNum
+                        
                         inputDataQueue.put((i, slice(i*partSize, endOfPart)))
                     
                     #vložíme příznaky konce.

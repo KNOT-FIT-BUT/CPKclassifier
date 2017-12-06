@@ -431,10 +431,12 @@ class Classification(object):
                 predictedAll[dataName][classifierName][weight]=[]
                 
                 #nastavíme velikost jednoho bloku
-                partSize=docNum/workers
-
+                partSize=int(docNum/workers)
+                if partSize==0:
+                    partSize=docNum
+                     
                 if splitIntoPartsOfMaxSize and splitIntoPartsOfMaxSize<partSize:
-                    partSize=splitIntoPartsOfMaxSize
+                    partSize=int(splitIntoPartsOfMaxSize)
                     
                 if workers>1:
                     #inicializace víceprocesového  zpracování
@@ -601,10 +603,12 @@ class Classification(object):
             if splitIntoPartsOfMaxSize or workers>1:
 
                 #nastavíme velikost jednoho bloku
-                partSize=actDocNum/workers
+                partSize=int(actDocNum/workers)
+                if partSize==0:
+                    partSize=docNum
 
                 if splitIntoPartsOfMaxSize and splitIntoPartsOfMaxSize<partSize:
-                    partSize=splitIntoPartsOfMaxSize
+                    partSize=int(splitIntoPartsOfMaxSize)
                     
                 
                 
