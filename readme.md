@@ -81,6 +81,26 @@ Předpokládáme vytvoření souboru data.txt s plnými texty a souboru meta.csv
 
 V této konfiguraci se klasifikátor pokusí odhadnout tři kategorie (seřazené od nejlepší).
 
+## Predikce na modelu NKP MZK
+Obdobně jako v předchozí sekci i zde budeme používat již před naučený model na datech z NKP a MZK, který je dostupný na: https://knot.fit.vutbr.cz/NAKI_CPK/NKP_MZK_model.zip . Manipulace s modelem je obdobná jako v předchozí sekci nicméně zde se používají tato metadata:
+
+* dedup_record_id
+  * ID dokumentu. Používá se jako dodatečná informace vypisovaná k výsledkům. Toto pole je možné zanedbat odstraněním z parametru WRITE_META_FIELDS v konfiguračním souboru.
+* 072_HIER
+    * Toto pole není nezbytné a je možné jej zanedbat odstraněním z parametru EMPTY v konfiguračním souboru. Slouží jen pro možnost mít klasifikované a neklasifikované dokumenty společně.
+* 245
+    * Používá se jako dodatečná informace vypisovaná k výsledkům. Toto pole je možné zanedbat odstraněním z parametru WRITE_META_FIELDS v konfiguračním souboru.
+* 245_lemm
+    * Lemmatizovaná verze 245. Používá se pro klasifikaci. Nelze zanedbat.
+* 100
+    * Používá se jako dodatečná informace vypisovaná k výsledkům. Toto pole je možné zanedbat odstraněním z parametru WRITE_META_FIELDS v konfiguračním souboru.
+* 080
+    * Používá se pro klasifikaci. Nelze zanedbat.
+* 6XX_964
+    * Používá se pro klasifikaci. Nelze zanedbat. Jedná se o sloučení několika metadatových polí dohromady. Konkrétně toto pole bylo získáno takto: GET_META_FIELDS=600+610+611+630+648+650+651+653+655+695+964:6XX_964
+
+Plné texty v tomto případě nejsou použity
+
 ## Předzpracování
 
 V této sekci si uvedeme příklad použití pro:
