@@ -48,41 +48,16 @@ Nápovědu pro jednotlivé nástroje pak lze získat například pro předzpraco
 
 U příkladů budeme často používat konfigurační soubory. Přídavné konfigurační soubory přepisují hodnoty, které jsou v nich uvedené, z výchozího konfiguračního souboru.
 
-## Predikce na modelu NAKI CPK
+## Predikce na modelu NKP MZK
+Pro tuto část budeme používat naučený model (na datech z NKP a MZK) a konfigurační soubor z:   
 
-Pro tuto část budeme používat naučený model a konfigurační soubor z: https://knot.fit.vutbr.cz/NAKI_CPK/naki_cpk_model.zip. Popíšeme si, jakým způsobem se predikují kategorie dokumentu z tohoto předem naučeného modelu.
+    https://knot.fit.vutbr.cz/NAKI_CPK/NKP_MZK_model.zip
 
-Dále je nutné poskytnout data pro klasifikaci. Naučený model požaduje soubor s plnými texty a soubor s metadaty. Triviální příklady těchto souborů jsou dostupné v: data/priklady.
+Popíšeme si, jakým způsobem se predikují kategorie dokumentu z tohoto předem naučeného modelu.
+
+K modelu je nutné poskytnout data pro klasifikaci. Naučený model požaduje pouze soubor s metadaty. Plné texty nepoužívá.
 
 Metadata:
-
-* dedup_record_id
-  * ID dokumentu. Používá se jako dodatečná informace vypisovaná k výsledkům. Toto pole je možné zanedbat odstraněním z parametru WRITE_META_FIELDS v konfiguračním souboru.
-* 072_HIER
-    * Toto pole není nezbytné a je možné jej zanedbat odstraněním z parametru EMPTY v konfiguračním souboru. Slouží jen pro možnost mít klasifikované a neklasifikované dokumenty společně.
-* 245
-    * Používá se jako dodatečná informace vypisovaná k výsledkům. Toto pole je možné zanedbat odstraněním z parametru WRITE_META_FIELDS v konfiguračním souboru.
-* 245_lemm
-    * Lemmatizovaná verze 245. Používá se pro klasifikaci. Nelze zanedbat.
-* 100
-    * Používá se jako dodatečná informace vypisovaná k výsledkům. Toto pole je možné zanedbat odstraněním z parametru WRITE_META_FIELDS v konfiguračním souboru.
-* 080
-    * Používá se pro klasifikaci. Nelze zanedbat.
-
-Pro více informací je vhodné se podívat přímo do konfiguračního souboru.
-
-Pro názornost budeme předpokládat, že potřebná data se nachází v: data/NAKI.
-
-Predikci spustíme následujícím příkazem:
-
-    ./CPKclassifier.py prediction --data data/NAKI/data.txt --metadata data/NAKI/meta.csv --classifiers data/NAKI/NAKI_cls.bin --config data/NAKI/config.ini --log data/NAKI/pred.log > data/NAKI/pred.csv
-
-Předpokládáme vytvoření souboru data.txt s plnými texty a souboru meta.csv s metadaty. V souboru pred.log bude zaznamenán průběh operace a výsledky budou uloženy v pred.csv.
-
-V této konfiguraci se klasifikátor pokusí odhadnout tři kategorie (seřazené od nejlepší).
-
-## Predikce na modelu NKP MZK
-Obdobně jako v předchozí sekci i zde budeme používat již před naučený model na datech z NKP a MZK, který je dostupný na: https://knot.fit.vutbr.cz/NAKI_CPK/NKP_MZK_model.zip . Manipulace s modelem je obdobná jako v předchozí sekci nicméně zde se používají tato metadata:
 
 * dedup_record_id
   * ID dokumentu. Používá se jako dodatečná informace vypisovaná k výsledkům. Toto pole je možné zanedbat odstraněním z parametru WRITE_META_FIELDS v konfiguračním souboru.
@@ -99,7 +74,19 @@ Obdobně jako v předchozí sekci i zde budeme používat již před naučený m
 * 6XX_964
     * Používá se pro klasifikaci. Nelze zanedbat. Jedná se o sloučení několika metadatových polí dohromady. Konkrétně toto pole bylo získáno takto: GET_META_FIELDS=600+610+611+630+648+650+651+653+655+695+964:6XX_964
 
-Plné texty v tomto případě nejsou použity
+
+Pro více informací je vhodné se podívat přímo do konfiguračního souboru.
+
+Pro názornost budeme předpokládat, že potřebná data se nachází v adresáři: data.
+
+Predikci spustíme následujícím příkazem:
+
+    ./CPKclassifier.py prediction --metadata data/meta.csv --classifiers data/cls.bin --config data/config.ini --log data/pred.log > data/pred.csv
+
+Předpokládáme předem vytvořený souboru meta.csv s metadaty.  Triviální příklady vstupních souborů jsou v: data/priklady. V souboru pred.log bude zaznamenán průběh operace a výsledky budou uloženy v pred.csv.
+
+V této konfiguraci se klasifikátor pokusí odhadnout tři kategorie (seřazené od nejlepší).
+
 
 ## Předzpracování
 
