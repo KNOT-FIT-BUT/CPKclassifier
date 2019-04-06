@@ -162,6 +162,16 @@ Mimo to si opět necháváme uložit i průběh do logovacího souboru.
 
 ## Trénování klasifikátoru
 
+CPKclassifier umožňuje natrénovat jeden či více klasifikátorů. Je tedy možné každému druhu dat přiřadit klasifikátor, který je nejlépe klasifikuje. Výsledky jednotlivých klasifikátorů se agregují pomocí váženého průměru (dle vah klasifikátorů) a díky tomu se model navenek tváří jako jeden klasifikátor.
+
+Nežli se vrhneme na praktické příklady, rozeberme si zde možnou podobu parametru CLASSIFIER z konfiguračního souboru, který slouží k přiřazení dat a vah klasifikátorům:
+
+	CLASSIFIER=A:LinearSVC:0.8 B:KNeighborsClassifier:0.63 C:SGDClassifier:0.79 
+
+Následující řádek definuje, že data A budou klasifikována pomocí LinearSVC s váhou 0.8, data B pomocí KneighborsClassifier s váhou 0.63 a C pomocí SGDClassifier 0.79. Nad každým druhem dat natrénujeme příslušný klasifikátor a při klasifikaci nejprve klasifikujeme každý druh dat zvlášť, tím dostaneme pro daný dokument jistoty od každého klasifikátoru. Tyto jistoty jsou nakonec agregovány pomocí váženého průměru.
+
+### Příklady
+
 Budeme používat nástroj:
 
     ./CPKclassifier.py classification
