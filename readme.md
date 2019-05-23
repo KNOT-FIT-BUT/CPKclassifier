@@ -35,7 +35,7 @@ Pro informace k instalaci programu MorphoDiTa prosím navštivte oficiální str
 
 Pro instalaci závislostí je i možné použít requirements.txt:
 
-	sudo pip3 install -r requirements.txt
+	pip3 install -r requirements.txt
 
 	
 
