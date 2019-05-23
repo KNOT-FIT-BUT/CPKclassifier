@@ -127,7 +127,7 @@ class ArgumentsManager:
         :returns: Zpracované argumenty.
         """
         
-        parser = ExceptionsArgumentParser(description="Nástroj pro klasifikaci dokumentů, hledání podobných dokumentů a předzpracování dokumentů. Dodatečné parametry lze nastavit v konfiguračním souboru.")
+        parser = ExceptionsArgumentParser(description="Nástroj pro klasifikaci dokumentů a předzpracování dokumentů. Dodatečné parametry lze nastavit v konfiguračním souboru.")
         
         subparsers = parser.add_subparsers()
         
