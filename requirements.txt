@@ -1,0 +1,7 @@
+gensim==2.3.0
+Unidecode==0.04.21
+scipy==0.19.1
+numpy==1.11.0
+ufal.morphodita==1.9.2.1
+pandas==0.17.1
+scikit_learn==0.21.1

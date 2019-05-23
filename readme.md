@@ -29,9 +29,15 @@ Je nutné nainstalovat tyto závislosti:
 
 Je možné použít nástroj pip (pip3). Tedy například:
 
-    pip install unidecode
+    pip3 install unidecode
 
 Pro informace k instalaci programu MorphoDiTa prosím navštivte oficiální stránky: http://ufal.mff.cuni.cz/morphodita/install. Je nutné nainstalovat balíček ufal.morphodita.
+
+Pro instalaci závislostí je i možné použít requirements.txt:
+
+	sudo pip3 install -r requirements.txt
+
+	
 
 
 # Příklady
